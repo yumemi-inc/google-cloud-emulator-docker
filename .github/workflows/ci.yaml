@@ -16,7 +16,7 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v4
-      - name: Dokerfile lint
+      - name: Dockerfile lint
         id: hadolint
         uses: hadolint/hadolint-action@v3.1.0
         with:
