@@ -1,0 +1,18 @@
+services:
+  pubsub-emulator:
+    build:
+      context: ../../
+      dockerfile: Dockerfile
+    command:
+      - --emulator=pubsub
+      - --port=8085
+    ports:
+      - 8085:8085/tcp
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8085"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    volumes:
+      - ./initdb.d/:/docker-entrypoint-initdb.d/ready.d/
