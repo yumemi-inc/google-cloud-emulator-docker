@@ -30,7 +30,6 @@ jobs:
         run: shellcheck entrypoint.sh
 
   build:
-    name: Build Docker image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -48,3 +47,27 @@ jobs:
           tags: google-cloud-emulator-docker:test
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  test-create-pubsub-topic:
+    runs-on: ubuntu-latest
+    needs: build
+    defaults:
+      run:
+        working-directory: examples/create_pubsub_topic
+    steps:
+      - uses: actions/checkout@v4
+      - name: start emulator
+        run: docker compose up -d --wait
+      - name: test
+        run: |
+          curl -s http://localhost:8085/v1/projects/test-project/topics | \
+            jq -e '. == {
+              "topics": [
+                {
+                  "name": "projects/test-project/topics/email-notifications"
+                },
+                {
+                  "name": "projects/test-project/topics/push-notifications"
+                }
+              ]
+            }'
