@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-INIT_DIR="/docker-entrypoint-initdb.d"
+INIT_DIR="/docker-entrypoint-init.d"
 
 EMULATOR_TYPE=""
 PORT=""

@@ -12,10 +12,10 @@
 
 ## 特徴 (Features)
 
-* **初期化フック**: コンテナ内の `/docker-entrypoint-initdb.d/ready.d/` ディレクトリに配置されたスクリプトを、エミュレータが起動し準備ができた後に自動的に実行します。
+* **初期化フック**: コンテナ内の `/docker-entrypoint-init.d/ready.d/` ディレクトリに配置されたスクリプトを、エミュレータが起動し準備ができた後に自動的に実行します。
   ```
   /
-  └─ docker-entrypoint-initdb.d
+  └─ docker-entrypoint-init.d
     └─ ready.d    <- エミュレーターの準備が完了した後に実行される
   ```
 * **サポートするスクリプト**:
@@ -55,18 +55,18 @@ services:
       start_period: 10s
     volumes:
       # ホストの初期化スクリプトディレクトリをコンテナのready.dにマウント
-      - ./initdb.d/:/docker-entrypoint-initdb.d/ready.d/
+      - ./init.d/:/docker-entrypoint-init.d/ready.d/
 ```
 
 1. 上記のような `compose.yaml` ファイルを作成します。
-2. ホストマシンに初期化スクリプトを配置するディレクトリ（例: `initdb.d`）を作成します。
-3. `initdb.d` ディレクトリ内に、実行したい `.sh` または `.py` スクリプトを配置します。
-4. `docker-compose up` コマンドでコンテナを起動します。
-5. エミュレータが起動し、ヘルスチェックが成功した後、`initdb.d` 内のスクリプトが実行されます。
+2. ホストマシンに初期化スクリプトを配置するディレクトリ（例: `init.d`）を作成します。
+3. `init.d` ディレクトリ内に、実行したい `.sh` または `.py` スクリプトを配置します。
+4. `docker compose up` コマンドでコンテナを起動します。
+5. エミュレータが起動し、ヘルスチェックが成功した後、`init.d` 内のスクリプトが実行されます。
 
 ### 初期化スクリプトの例 (Initialization Script Example)
 
-以下は、Pub/Subエミュレータ起動後にトピックを作成するPythonスクリプトの例です (`initdb.d/01-create-topic.py`)。
+以下は、Pub/Subエミュレータ起動後にトピックを作成するPythonスクリプトの例です (`init.d/01-create-topic.py`)。
 
 ```python
 from google.cloud import pubsub_v1
