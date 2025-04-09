@@ -35,7 +35,7 @@ jobs:
           images: ghcr.io/yumemi-inc/google-cloud-emulator
           tags: |
             type=semver,pattern={{version}}
-            type=match,pattern=v(\d.\d.\d),group=1
+            type=match,pattern=\d+\.\d+\.\d
             type=raw,value=latest
 
       - name: Build and push Docker image
