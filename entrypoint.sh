@@ -70,7 +70,7 @@ sleep 5
 echo "Emulator started with PID: $EMULATOR_PID"
 
 # Wait for emulator to be ready
-until curl -s http://localhost:${PORT} > /dev/null; do
+until curl -s "http://localhost:${PORT}" > /dev/null; do
   echo "Waiting for emulator to be ready..."
   sleep 5
 done
@@ -78,7 +78,7 @@ echo "Emulator is ready."
 
 # Set environment variables for connecting to the emulator
 echo "Setting up environment variables..."
-eval "$(gcloud beta emulators ${EMULATOR_TYPE} env-init)"
+eval "$(gcloud beta emulators "${EMULATOR_TYPE}" env-init)"
 echo "Environment variables set."
 
 # Run ready.d scripts
