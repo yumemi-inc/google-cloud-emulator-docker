@@ -89,7 +89,7 @@ create_topic("test-project", "push-notifications")
 同等の内容をシェルスクリプトで書くことも可能です。
 
 ```bash
-#!env bash
+#!/bin/bash
 
 curl -X PUT http://${PUBSUB_EMULATOR_HOST}/v1/projects/test-project/topics/email-notifications
 curl -X PUT http://${PUBSUB_EMULATOR_HOST}/v1/projects/test-project/topics/push-notifications
