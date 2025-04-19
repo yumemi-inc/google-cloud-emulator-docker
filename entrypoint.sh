@@ -99,7 +99,7 @@ if [ -d "$READY_DIR" ] && [ -n "$(ls -A $READY_DIR 2>/dev/null)" ]; then
   for f in "$READY_DIR"/*.py; do
     if [ -f "$f" ]; then
       echo "Running hook: $f (with python)"
-      /venv/bin/python "$f"
+      uv run "$f"
     fi
   done
 
