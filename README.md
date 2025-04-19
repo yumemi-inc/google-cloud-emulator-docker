@@ -20,7 +20,7 @@
   ```
 * **サポートするスクリプト**:
   * シェルスクリプト (`.sh`): `bash` で実行されます。
-  * Pythonスクリプト (`.py`): `Python 3.11` で実行されます。
+  * Pythonスクリプト (`.py`): `Python 3.12` で実行されます。
 * **Python環境**: 以下の主要なGoogle Cloudクライアントライブラリがインストール済みです。  
   バージョンやそれ以外のインストール済みライブラリについては `requirements.txt` を参照してください。
   * `google-cloud-bigtable`
