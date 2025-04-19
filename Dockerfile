@@ -6,9 +6,8 @@ WORKDIR /app
 
 COPY .python-version pyproject.toml uv.lock ./
 
-RUN uv sync
-
-RUN mkdir -p /docker-entrypoint-init.d/ready.d
+RUN uv sync && \
+    mkdir -p /docker-entrypoint-init.d/ready.d
 
 COPY entrypoint.sh ./
 
