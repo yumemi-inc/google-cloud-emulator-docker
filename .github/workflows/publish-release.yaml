@@ -1,0 +1,39 @@
+name: Publish Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create-release:
+    if: github.ref_name == 'main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Extract version and create tag
+        id: tag
+        run: |
+          # Dockerfileから「519.0.0」のようなバージョン番号を抽出
+          line=$(head -n 1 ./Dockerfile)
+          pattern="[0-9]+\.[0-9]+\.[0-9]+"
+
+          if ! [[ $line =~ $pattern ]]; then
+            echo "No version found"
+            exit 1
+          fi
+
+          VERSION=${BASH_REMATCH[0]}
+
+          # 現在の日付を取得（YYYYMMDD形式）
+          DATE=$(date '+%Y%m%d')
+
+          # タグを作成（例：v519.0.0-20250430）
+          TAG="v${VERSION}-${DATE}"
+
+          echo "Generated tag: $TAG"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+      - name: Create GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: gh release create "${TAG}" --title "Release ${TAG}" --generate-notes
