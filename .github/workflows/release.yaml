@@ -134,6 +134,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [format-tag]
     steps:
+      - uses: actions/checkout@v4
       - name: Create GitHub Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
