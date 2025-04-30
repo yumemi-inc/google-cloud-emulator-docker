@@ -1,21 +1,50 @@
 name: Release
 
 on:
-  release:
-    types:
-      - published
+  workflow_dispatch:
 
 permissions:
   id-token: write
   attestations: write
-  contents: read
+  contents: write
   packages: write
 
 env:
   REGISTRY_IMAGE: ghcr.io/yumemi-inc/google-cloud-emulator
 
 jobs:
+  format-tag:
+    if: github.ref_name == 'main'
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract version and create tag
+        id: tag
+        run: |
+          # Dockerfileから「519.0.0」のようなバージョン番号を抽出
+          line=$(head -n 1 ./Dockerfile)
+          pattern="[0-9]+\.[0-9]+\.[0-9]+"
+
+          if ! [[ $line =~ $pattern ]]; then
+            echo "No version found"
+            exit 1
+          fi
+
+          VERSION=${BASH_REMATCH[0]}
+
+          # 現在の日付を取得（YYYYMMDD形式）
+          DATE=$(date '+%Y%m%d')
+
+          # タグを作成（例：v519.0.0-20250430）
+          TAG="v${VERSION}-${DATE}"
+
+          echo "Generated tag: $TAG"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
   build-push:
+    needs: format-tag
     strategy:
       fail-fast: false
       matrix:
@@ -69,7 +98,7 @@ jobs:
           retention-days: 1
 
   merge-image:
-    needs: build-push
+    needs: [format-tag, build-push]
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/download-artifact@v4
@@ -89,8 +118,8 @@ jobs:
         with:
           images: ${{ env.REGISTRY_IMAGE }}
           tags: |
-            type=semver,pattern={{version}}
-            type=match,pattern=\d+\.\d+\.\d
+            type=raw,value=${{ needs.format-tag.outputs.tag }}
+            type=match,pattern=\d+\.\d+\.\d,value=${{ needs.format-tag.outputs.tag }}
             type=raw,value=latest
       - name: Create manifest list and push
         working-directory: ${{ runner.temp }}/digests
@@ -100,3 +129,13 @@ jobs:
       - name: Inspect image
         run: |
           docker buildx imagetools inspect ${{ env.REGISTRY_IMAGE }}:${{ steps.meta.outputs.version }}
+
+  publish-release:
+    runs-on: ubuntu-latest
+    needs: [format-tag]
+    steps:
+      - name: Create GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ needs.format-tag.outputs.tag }}
+        run: gh release create "${TAG}" --title "${TAG}" --generate-notes
