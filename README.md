@@ -47,12 +47,6 @@ services:
       # - --project=my-project # その他のgcloud emulator引数も追加可能
     ports:
       - "8085:8085"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8085"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
     volumes:
       # ホストの初期化スクリプトディレクトリをコンテナのready.dにマウント
       - ./init.d/:/docker-entrypoint-init.d/ready.d/

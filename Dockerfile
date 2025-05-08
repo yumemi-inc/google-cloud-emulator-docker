@@ -11,4 +11,7 @@ RUN uv sync && \
 
 COPY entrypoint.sh ./
 
+HEALTHCHECK --interval=10s --timeout=5s --start-period=10s --retries=5 \
+  CMD [ -f /tmp/init-completed ] || exit 1
+
 ENTRYPOINT [ "/app/entrypoint.sh" ]

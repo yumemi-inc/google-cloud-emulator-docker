@@ -106,5 +106,9 @@ if [ -d "$READY_DIR" ] && [ -n "$(ls -A $READY_DIR 2>/dev/null)" ]; then
   echo "Ready scripts completed."
 fi
 
+# Create a file to indicate initialization is complete
+touch /tmp/init-completed
+echo "Initialization completed marker created at /tmp/init-completed"
+
 # Keep the container running by waiting for the emulator process
 wait $EMULATOR_PID

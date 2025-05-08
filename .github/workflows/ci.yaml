@@ -71,3 +71,40 @@ jobs:
                 }
               ]
             }'
+
+  test-delayed-initialization:
+    runs-on: ubuntu-latest
+    needs: build
+    defaults:
+      run:
+        working-directory: tests/delayed_initialization
+    steps:
+      - uses: actions/checkout@v4
+      - name: start emulator
+        run: docker compose up -d --wait
+      - name: Verify initialization and health check sequence
+        run: |
+          container_id=$(docker compose ps -q pubsub-emulator)
+
+          # 各タイムスタンプを取得
+          init_start=$(docker exec $container_id cat /tmp/init-started)
+          init_complete=$(docker exec $container_id cat /tmp/delayed-init-completed)
+
+          # Docker inspect からヘルスチェック履歴を取得
+          health_history=$(docker inspect --format='{{json .State.Health.Log}}' $container_id)
+
+          # 最初に成功したヘルスチェックの時刻を抽出
+          first_healthy_time=$(echo $health_history | jq -r '.[] | select(.ExitCode==0) | .Start' | head -1 | cut -d'.' -f1)
+          first_healthy_time=$(date -d "$first_healthy_time" +%s)
+
+          echo "Initialization started at: $(date -d @$init_start)"
+          echo "Initialization completed at: $(date -d @$init_complete)"
+          echo "First successful health check at: $(date -d @$first_healthy_time)"
+
+          # 初期化完了後にヘルスチェックが成功していることを確認
+          if [ $first_healthy_time -lt $init_complete ]; then
+            echo "ERROR: Health check succeeded before initialization completed!"
+            exit 1
+          fi
+
+          echo "Test passed: Health check succeeded only after initialization completed."
