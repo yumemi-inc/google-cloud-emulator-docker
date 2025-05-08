@@ -1,0 +1,12 @@
+services:
+  pubsub-emulator:
+    build:
+      context: ../../
+      dockerfile: Dockerfile
+    command:
+      - --emulator=pubsub
+      - --port=8085
+    ports:
+      - 8085:8085/tcp
+    volumes:
+      - ./init.d/:/docker-entrypoint-init.d/ready.d/
