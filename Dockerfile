@@ -1,4 +1,4 @@
-FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:520.0.0-emulators
+FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:521.0.0-emulators
 
 COPY --from=ghcr.io/astral-sh/uv:0.6.14 /uv /uvx /bin/
 
