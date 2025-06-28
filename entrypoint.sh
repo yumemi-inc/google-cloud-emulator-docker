@@ -11,7 +11,7 @@ ADDITIONAL_ARGS=()
 BETA_EMULATORS=("bigtable" "datastore" "pubsub")
 
 # Define emulator types that have env-init
-ENV_INIT_EMULATORS=("pubsub")
+ENV_INIT_EMULATORS=("datastore" "pubsub")
 
 # check if emulator type requires beta
 function is_beta_emulator() {
@@ -86,8 +86,8 @@ else
 fi
 
 # Add any additional arguments
-if [ "$#" -gt 0 ]; then
-  COMMAND+=("$@")
+if [ "${#ADDITIONAL_ARGS[@]}" -gt 0 ]; then
+  COMMAND+=("${ADDITIONAL_ARGS[@]}")
 fi
 
 echo "Executing command: ${COMMAND[*]}"

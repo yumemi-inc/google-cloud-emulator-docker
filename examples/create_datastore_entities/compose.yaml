@@ -1,0 +1,13 @@
+services:
+  datastore-emulator:
+    build:
+      context: ../../
+      dockerfile: Dockerfile
+    command:
+      - --emulator=datastore
+      - --port=8081
+      - --project=test-project
+    ports:
+      - 8081:8081/tcp
+    volumes:
+      - ./init.d/:/docker-entrypoint-init.d/ready.d/
