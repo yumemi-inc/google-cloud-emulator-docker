@@ -102,8 +102,9 @@ sleep 5
 echo "Emulator started with PID: $EMULATOR_PID"
 
 # Wait for emulator to be ready
-until curl -s "http://localhost:${PORT}" > /dev/null; do
-  echo "Waiting for emulator to be ready..."
+echo "Waiting for emulator to be ready..."
+until timeout 1 bash -c "</dev/tcp/localhost/${PORT}"; do
+  echo "Waiting for ${EMULATOR_TYPE} emulator to be ready..."
   sleep 5
 done
 echo "Emulator is ready."
