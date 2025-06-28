@@ -5,8 +5,6 @@ services:
       dockerfile: Dockerfile
       cache_from:
         - type=gha,scope=gced
-      cache_to:
-        - type=gha,mode=max,scope=gced
     command:
       - --emulator=pubsub
       - --port=8085
