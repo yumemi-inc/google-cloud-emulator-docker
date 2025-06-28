@@ -1,0 +1,14 @@
+services:
+  firestore-emulator:
+    build:
+      context: ../../
+      dockerfile: Dockerfile
+      cache_from:
+        - type=gha,scope=gced
+    command:
+      - --emulator=firestore
+      - --port=8080
+    ports:
+      - 8080:8080/tcp
+    volumes:
+      - ./init.d/:/docker-entrypoint-init.d/ready.d/
