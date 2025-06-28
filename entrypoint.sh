@@ -10,7 +10,7 @@ ADDITIONAL_ARGS=()
 # Define emulator types that require beta
 BETA_EMULATORS=("bigtable" "datastore" "pubsub")
 
-# Define emulator types that has env-init
+# Define emulator types that have env-init
 ENV_INIT_EMULATORS=("pubsub")
 
 # check if emulator type requires beta
