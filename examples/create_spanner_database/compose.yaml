@@ -1,0 +1,12 @@
+services:
+  spanner-emulator:
+    build:
+      context: ../../
+      dockerfile: Dockerfile
+    command:
+      - --emulator=spanner
+      - --port=9010
+    ports:
+      - 9010:9010/tcp
+    volumes:
+      - ./init.d/:/docker-entrypoint-init.d/ready.d/

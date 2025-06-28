@@ -79,6 +79,66 @@ jobs:
               ]
             }'
 
+  test-create-spanner-database:
+    runs-on: ubuntu-latest
+    needs: build
+    defaults:
+      run:
+        working-directory: examples/create_spanner_database
+    steps:
+      - uses: actions/checkout@v4
+      - name: start emulator
+        run: docker compose up -d --wait
+      - name: test database creation
+        run: |
+          # Test using Spanner REST API
+          BASE_URL="http://localhost:9010"
+          PROJECT_ID="test-project"
+          INSTANCE_ID="test-instance"
+          DATABASE_ID="test-database"
+          
+          # Verify instance exists
+          echo "Checking if instance exists..."
+          curl -f -s "${BASE_URL}/v1/projects/${PROJECT_ID}/instances/${INSTANCE_ID}" | \
+            jq -e '.name == "projects/test-project/instances/test-instance"'
+          
+          # Verify database exists
+          echo "Checking if database exists..."
+          curl -f -s "${BASE_URL}/v1/projects/${PROJECT_ID}/instances/${INSTANCE_ID}/databases/${DATABASE_ID}" | \
+            jq -e '.name == "projects/test-project/instances/test-instance/databases/test-database"'
+          
+          # Verify tables exist by getting DDL
+          echo "Checking database schema..."
+          ddl_response=$(curl -f -s "${BASE_URL}/v1/projects/${PROJECT_ID}/instances/${INSTANCE_ID}/databases/${DATABASE_ID}/ddl")
+          echo "$ddl_response" | jq -e '.statements | any(contains("CREATE TABLE Users"))'
+          echo "$ddl_response" | jq -e '.statements | any(contains("CREATE TABLE Orders"))'
+          
+          # Verify sample data exists
+          echo "Checking sample data..."
+          query_payload='{"sql": "SELECT COUNT(*) as user_count FROM Users"}'
+          user_count=$(curl -f -s -X POST -H "Content-Type: application/json" \
+            -d "$query_payload" \
+            "${BASE_URL}/v1/projects/${PROJECT_ID}/instances/${INSTANCE_ID}/databases/${DATABASE_ID}:executeSql" | \
+            jq -r '.rows[0][0]')
+          
+          if [ "$user_count" != "3" ]; then
+            echo "Expected 3 users, got $user_count"
+            exit 1
+          fi
+          
+          query_payload='{"sql": "SELECT COUNT(*) as order_count FROM Orders"}'
+          order_count=$(curl -f -s -X POST -H "Content-Type: application/json" \
+            -d "$query_payload" \
+            "${BASE_URL}/v1/projects/${PROJECT_ID}/instances/${INSTANCE_ID}/databases/${DATABASE_ID}:executeSql" | \
+            jq -r '.rows[0][0]')
+          
+          if [ "$order_count" != "3" ]; then
+            echo "Expected 3 orders, got $order_count"
+            exit 1
+          fi
+          
+          echo "All tests passed!"
+
   test-delayed-initialization:
     runs-on: ubuntu-latest
     needs: build
