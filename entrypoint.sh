@@ -7,6 +7,34 @@ EMULATOR_TYPE=""
 PORT=""
 ADDITIONAL_ARGS=()
 
+# Define emulator types that require beta
+BETA_EMULATORS=("bigtable" "datastore" "pubsub")
+
+# Define emulator types that has env-init
+ENV_INIT_EMULATORS=("pubsub")
+
+# check if emulator type requires beta
+function is_beta_emulator() {
+  local emulator="$1"
+  for beta_emulator in "${BETA_EMULATORS[@]}"; do
+    if [[ "$emulator" == "$beta_emulator" ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+# check if emulator type has env-init
+function has_env_init() {
+  local emulator="$1"
+  for env_init_emulator in "${ENV_INIT_EMULATORS[@]}"; do
+    if [[ "$emulator" == "$env_init_emulator" ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
 # show_usage displays the usage information
 function show_usage() {
   echo "Usage: $0 --emulator=<emulator_type> --port=<port> [additional args...]"
@@ -50,8 +78,12 @@ fi
 echo "Emulator type: $EMULATOR_TYPE"
 echo "Port: $PORT"
 
-# Construct the gcloud command
-COMMAND=("gcloud" "beta" "emulators" "$EMULATOR_TYPE" "start" "--host-port=0.0.0.0:$PORT")
+# Construct the gcloud command based on emulator type
+if is_beta_emulator "$EMULATOR_TYPE"; then
+  COMMAND=("gcloud" "beta" "emulators" "$EMULATOR_TYPE" "start" "--host-port=0.0.0.0:$PORT")
+else
+  COMMAND=("gcloud" "emulators" "$EMULATOR_TYPE" "start" "--host-port=0.0.0.0:$PORT")
+fi
 
 # Add any additional arguments
 if [ "$#" -gt 0 ]; then
@@ -78,8 +110,22 @@ echo "Emulator is ready."
 
 # Set environment variables for connecting to the emulator
 echo "Setting up environment variables..."
-eval "$(gcloud beta emulators "${EMULATOR_TYPE}" env-init)"
-echo "Environment variables set."
+if has_env_init "$EMULATOR_TYPE"; then
+  if is_beta_emulator "$EMULATOR_TYPE"; then
+    eval "$(gcloud beta emulators "${EMULATOR_TYPE}" env-init)"
+  else
+    eval "$(gcloud emulators "${EMULATOR_TYPE}" env-init)"
+  fi
+  echo "Environment variables set."
+fi
+
+# Firestore emulator does not support the env-init command, but requires manual environment variable configuration.
+# Therefore, we need to set them manually.
+if [ "$EMULATOR_TYPE" == "firestore" ]; then
+  export FIRESTORE_EMULATOR_HOST="localhost:$PORT"
+  export DATASTORE_EMULATOR_HOST="localhost:$PORT"
+  echo "Environment variables set."
+fi
 
 # Run ready.d scripts
 READY_DIR="${INIT_DIR}/ready.d"
