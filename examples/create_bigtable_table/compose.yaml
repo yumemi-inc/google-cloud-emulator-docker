@@ -1,0 +1,14 @@
+services:
+  bigtable-emulator:
+    build:
+      context: ../../
+      dockerfile: Dockerfile
+      cache_from:
+        - type=gha,scope=gced
+    command:
+      - --emulator=bigtable
+      - --port=8086
+    ports:
+      - 8086:8086/tcp
+    volumes:
+      - ./init.d/:/docker-entrypoint-init.d/ready.d/

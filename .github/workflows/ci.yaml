@@ -201,3 +201,46 @@ jobs:
                 "kind": [{"name": "Order"}]
               }
             }' | jq -e '.batch.entityResults | length == 2'
+
+  test-create-bigtable-table:
+    runs-on: ubuntu-latest
+    needs: build
+    defaults:
+      run:
+        working-directory: examples/create_bigtable_table
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Expose GitHub Runtime
+        uses: crazy-max/ghaction-github-runtime@v3
+      - name: Build Docker image
+        run: docker compose --progress=plain build
+        env:
+          COMPOSE_BAKE: true
+      - name: start emulator
+        run: docker compose up -d --wait
+      - name: test
+        run: |
+          # Use cbt command inside the Docker container
+          container_name=$(docker compose ps -q bigtable-emulator)
+
+          # Configure cbt to use the emulator (inside container)
+          docker exec $container_name bash -c '
+            echo "project = test-project" > ~/.cbtrc
+            echo "instance = test-instance" >> ~/.cbtrc
+            echo "creds = dummy" >> ~/.cbtrc
+          '
+
+          # List tables to verify creation
+          echo "Listing tables:"
+          tables=$(docker exec $container_name cbt ls | grep -E "^(analytics|user-data)$" | sort)
+          expected_tables=$(echo -e "analytics\nuser-data")
+
+          if [ "$tables" = "$expected_tables" ]; then
+            echo "Test passed: Expected tables found"
+          else
+            echo "Test failed: Expected tables not found"
+            echo "Expected: $expected_tables"
+            echo "Found: $tables"
+            exit 1
+          fi
