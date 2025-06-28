@@ -45,8 +45,8 @@ jobs:
           push: false
           load: true
           tags: google-cloud-emulator-docker:test
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=gced
+          cache-to: type=gha,mode=max,scope=gced
 
   test-create-pubsub-topic:
     runs-on: ubuntu-latest
@@ -56,6 +56,13 @@ jobs:
         working-directory: examples/create_pubsub_topic
     steps:
       - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Expose GitHub Runtime
+        uses: crazy-max/ghaction-github-runtime@v3
+      - name: Build Docker image
+        run: docker compose --progress=plain build
+        env:
+          COMPOSE_BAKE: true
       - name: start emulator
         run: docker compose up -d --wait
       - name: test
@@ -80,6 +87,13 @@ jobs:
         working-directory: tests/delayed_initialization
     steps:
       - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Expose GitHub Runtime
+        uses: crazy-max/ghaction-github-runtime@v3
+      - name: Build Docker image
+        run: docker compose --progress=plain build
+        env:
+          COMPOSE_BAKE: true
       - name: start emulator
         run: docker compose up -d --wait
       - name: Verify initialization and health check sequence
