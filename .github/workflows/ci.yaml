@@ -99,14 +99,18 @@ jobs:
       - name: test collections creation
         run: |
           # Test users collection
-          users_count=$(curl -s "http://localhost:8080/v1/projects/test-project/databases/(default)/documents/users" | jq '.documents | length')
+          users_count=$(curl -s \
+            "http://localhost:8080/v1/projects/test-project/databases/(default)/documents/users" | \
+            jq '.documents | length')
           if [ "$users_count" != "2" ]; then
             echo "ERROR: Expected 2 users documents, got $users_count"
             exit 1
           fi
 
           # Test products collection
-          products_count=$(curl -s "http://localhost:8080/v1/projects/test-project/databases/(default)/documents/products" | jq '.documents | length')
+          products_count=$(curl -s \
+            "http://localhost:8080/v1/projects/test-project/databases/(default)/documents/products" | \
+            jq '.documents | length')
           if [ "$products_count" != "2" ]; then
             echo "ERROR: Expected 2 products documents, got $products_count"
             exit 1
@@ -140,10 +144,15 @@ jobs:
           init_complete=$(docker exec $container_id cat /tmp/delayed-init-completed)
 
           # Docker inspect からヘルスチェック履歴を取得
-          health_history=$(docker inspect --format='{{json .State.Health.Log}}' $container_id)
+          health_history=$(docker inspect \
+            --format='{{json .State.Health.Log}}' \
+            $container_id)
 
           # 最初に成功したヘルスチェックの時刻を抽出
-          first_healthy_time=$(echo $health_history | jq -r '.[] | select(.ExitCode==0) | .Start' | head -1 | cut -d'.' -f1)
+          first_healthy_time=$(echo $health_history | \
+            jq -r '.[] | select(.ExitCode==0) | .Start' | \
+            head -1 | \
+            cut -d'.' -f1)
           first_healthy_time=$(date -d "$first_healthy_time" +%s)
 
           echo "Initialization started at: $(date -d @$init_start)"
