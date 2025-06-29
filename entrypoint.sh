@@ -11,7 +11,7 @@ ADDITIONAL_ARGS=()
 BETA_EMULATORS=("bigtable" "datastore" "pubsub")
 
 # Define emulator types that have env-init
-ENV_INIT_EMULATORS=("datastore" "pubsub")
+ENV_INIT_EMULATORS=("bigtable" "datastore" "pubsub")
 
 # check if emulator type requires beta
 function is_beta_emulator() {
@@ -102,8 +102,9 @@ sleep 5
 echo "Emulator started with PID: $EMULATOR_PID"
 
 # Wait for emulator to be ready
-until curl -s "http://localhost:${PORT}" > /dev/null; do
-  echo "Waiting for emulator to be ready..."
+echo "Waiting for emulator to be ready..."
+until timeout 1 bash -c "</dev/tcp/localhost/${PORT}"; do
+  echo "Waiting for ${EMULATOR_TYPE} emulator to be ready..."
   sleep 5
 done
 echo "Emulator is ready."
