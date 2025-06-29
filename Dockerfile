@@ -1,6 +1,6 @@
 FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:527.0.0-emulators
 
-RUN yes | gcloud components install cbt
+RUN gcloud components install cbt --quiet
 
 COPY --from=ghcr.io/astral-sh/uv:0.6.14 /uv /uvx /bin/
 
