@@ -233,7 +233,10 @@ jobs:
 
           # List tables to verify creation
           echo "Listing tables:"
-          tables=$(docker exec $container_name cbt ls | grep -E "^(analytics|user-data)$" | sort)
+          tables=$(docker exec $container_name \
+            bash -c '$(gcloud beta emulators bigtable env-init) && cbt ls' | \
+            grep -E "^(analytics|user-data)$" | \
+            sort)
           expected_tables=$(echo -e "analytics\nuser-data")
 
           if [ "$tables" = "$expected_tables" ]; then
