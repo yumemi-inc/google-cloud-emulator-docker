@@ -213,7 +213,7 @@ wheels = [
 
 [[package]]
 name = "google-cloud-spanner"
-version = "3.54.0"
+version = "3.58.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "google-api-core", extra = ["grpc"] },
@@ -224,9 +224,9 @@ dependencies = [
     { name = "protobuf" },
     { name = "sqlparse" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/4a/51/2d0c58b3a873b962192f7d2a293934b8623a2fc4dc3010d0cae67f0bea27/google_cloud_spanner-3.54.0.tar.gz", hash = "sha256:eef44f1207d6fae52819099cadfb225a19596e6551216831de6cbc245725efe4", size = 666352, upload-time = "2025-04-28T20:19:41.204Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ec/e2/5a6f8377c685d40d50701ffca3bc18d45565fb62c31941879f8efd7cdfad/google_cloud_spanner-3.58.0.tar.gz", hash = "sha256:00d9a809155d9a92e891a0a2b2568b920016652549864024da30940ac780cc2c", size = 702779, upload-time = "2025-09-22T05:36:25.917Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1a/9a/e20a2d5c77832ff3301b5478f4c9fd85ddf99652dbea58f9d3950ccf79c0/google_cloud_spanner-3.54.0-py2.py3-none-any.whl", hash = "sha256:81987b3fc7d9930e03f51bcb6c6567db62838b00bdfa82aeb708584f0536fc0c", size = 485297, upload-time = "2025-04-28T20:19:39.003Z" },
+    { url = "https://files.pythonhosted.org/packages/0e/86/49d9667324b9258e2bc0708dea2223256b6133954e71669086a953fb4210/google_cloud_spanner-3.58.0-py3-none-any.whl", hash = "sha256:db1c632ac5d0a1188cfe45b31db416120d3e0b07e885d0443a398c99e9fec542", size = 501919, upload-time = "2025-09-22T05:36:24.399Z" },
 ]
 
 [[package]]
