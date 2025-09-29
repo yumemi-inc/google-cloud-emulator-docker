@@ -1,4 +1,4 @@
-FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:535.0.0-emulators
+FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:540.0.0-emulators
 
 RUN gcloud components install cbt --quiet
 
