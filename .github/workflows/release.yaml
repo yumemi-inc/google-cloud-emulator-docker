@@ -24,7 +24,7 @@ jobs:
         id: tag
         run: |
           # Dockerfileから「519.0.0」のようなバージョン番号を抽出
-          line=$(head -n 1 ./Dockerfile)
+          line=$(sed -n 2p ./Dockerfile)
           pattern="[0-9]+\.[0-9]+\.[0-9]+"
 
           if ! [[ $line =~ $pattern ]]; then
