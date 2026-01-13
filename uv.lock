@@ -142,18 +142,20 @@ wheels = [
 
 [[package]]
 name = "google-cloud-datastore"
-version = "2.21.0"
+version = "2.23.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "google-api-core", extra = ["grpc"] },
     { name = "google-auth" },
     { name = "google-cloud-core" },
+    { name = "grpcio", version = "1.71.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.14'" },
+    { name = "grpcio", version = "1.76.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.14'" },
     { name = "proto-plus" },
     { name = "protobuf" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/6a/e1/82174567df885c78d10af94755443e0d1a69d02309aed55fa3b412297c53/google_cloud_datastore-2.21.0.tar.gz", hash = "sha256:eee454dd4a55f5b327f9f344928ff1a09a6f77c23d5e3d908ad31a13cc2f4073", size = 261373, upload-time = "2025-04-15T01:05:21.033Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/9d/4b/0e27a94a9a2be1b2ba53cbe571314c84a2555e5d9295c5d63bf43ede5483/google_cloud_datastore-2.23.0.tar.gz", hash = "sha256:80049883a4ae928fdcc661ba6803ec267665dc0e6f3ce2da91441079a6bb6387", size = 264913, upload-time = "2025-12-16T22:09:33.393Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e1/a7/6ecb2f147cb9da8feb5bdbf959d481ca62f2e27106f3446b67dc8a892659/google_cloud_datastore-2.21.0-py2.py3-none-any.whl", hash = "sha256:f303f27cd1983383f20bd227019cd8a7897419e0ec6b878367c58c66245f9d9b", size = 208009, upload-time = "2025-04-15T01:05:19.088Z" },
+    { url = "https://files.pythonhosted.org/packages/b7/88/348c09570a03886356c02337f06d69532fa17a66ad2a9dff584f7b60eb04/google_cloud_datastore-2.23.0-py3-none-any.whl", hash = "sha256:24a1b1d29b902148fe41b109699f76fd3aa60591e9d547c0f8b87d7bf9ff213f", size = 206815, upload-time = "2025-12-16T22:09:31.608Z" },
 ]
 
 [[package]]
