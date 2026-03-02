@@ -58,7 +58,7 @@ jobs:
       - uses: actions/checkout@v6
       - uses: docker/setup-buildx-action@v3
       - name: Expose GitHub Runtime
-        uses: crazy-max/ghaction-github-runtime@v3
+        uses: crazy-max/ghaction-github-runtime@v4
       - name: Build Docker image
         run: docker compose --progress=plain build
         env:
@@ -89,7 +89,7 @@ jobs:
       - uses: actions/checkout@v6
       - uses: docker/setup-buildx-action@v3
       - name: Expose GitHub Runtime
-        uses: crazy-max/ghaction-github-runtime@v3
+        uses: crazy-max/ghaction-github-runtime@v4
       - name: Build Docker image
         run: docker compose --progress=plain build
         env:
@@ -128,7 +128,7 @@ jobs:
       - uses: actions/checkout@v6
       - uses: docker/setup-buildx-action@v3
       - name: Expose GitHub Runtime
-        uses: crazy-max/ghaction-github-runtime@v3
+        uses: crazy-max/ghaction-github-runtime@v4
       - name: Build Docker image
         run: docker compose --progress=plain build
         env:
@@ -177,7 +177,7 @@ jobs:
       - uses: actions/checkout@v6
       - uses: docker/setup-buildx-action@v3
       - name: Expose GitHub Runtime
-        uses: crazy-max/ghaction-github-runtime@v3
+        uses: crazy-max/ghaction-github-runtime@v4
       - name: Build Docker image
         run: docker compose --progress=plain build
         env:
@@ -221,7 +221,7 @@ jobs:
       - uses: actions/checkout@v6
       - uses: docker/setup-buildx-action@v3
       - name: Expose GitHub Runtime
-        uses: crazy-max/ghaction-github-runtime@v3
+        uses: crazy-max/ghaction-github-runtime@v4
       - name: Build Docker image
         run: docker compose --progress=plain build
         env:
