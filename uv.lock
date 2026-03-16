@@ -197,23 +197,22 @@ wheels = [
 
 [[package]]
 name = "google-cloud-pubsub"
-version = "2.34.0"
+version = "2.36.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "google-api-core", extra = ["grpc"] },
     { name = "google-auth" },
     { name = "grpc-google-iam-v1" },
     { name = "grpcio", version = "1.71.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.14'" },
-    { name = "grpcio", version = "1.76.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.14'" },
     { name = "grpcio-status" },
     { name = "opentelemetry-api" },
     { name = "opentelemetry-sdk" },
     { name = "proto-plus" },
     { name = "protobuf" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/87/b0/7073a2d17074f0d4a53038c6141115db19f310a2f96bd3911690f15bd701/google_cloud_pubsub-2.34.0.tar.gz", hash = "sha256:25f98c3ba16a69871f9ebbad7aece3fe63c8afe7ba392aad2094be730d545976", size = 396526, upload-time = "2025-12-16T22:44:22.319Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/4e/8d/f5cece431daaa2024129569ed35e6eb90a72bb51f0c96e5c7f5cab6d34d7/google_cloud_pubsub-2.36.0.tar.gz", hash = "sha256:96e057e5f83433ce428852095d652c2f7fc193f0f77db1f27cc39186fe69c1f4", size = 401324, upload-time = "2026-03-12T19:31:02.099Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/45/d3/9c06e5ccd3e5b0f4b3bc6d223cb21556e597571797851e9f8cc38b7e2c0b/google_cloud_pubsub-2.34.0-py3-none-any.whl", hash = "sha256:aa11b2471c6d509058b42a103ed1b3643f01048311a34fd38501a16663267206", size = 320110, upload-time = "2025-12-16T22:44:20.349Z" },
+    { url = "https://files.pythonhosted.org/packages/93/fd/d0a8f0f93a4d115282ecdd8ef0267e4611bde6ca29c9dba803f3ebae7115/google_cloud_pubsub-2.36.0-py3-none-any.whl", hash = "sha256:d6726ccf9373924e0746338dadf8244b9aa1a97a24130b59a2106c926ea37598", size = 323364, upload-time = "2026-03-12T19:30:48.077Z" },
 ]
 
 [[package]]
